@@ -35,6 +35,8 @@ public interface IFileManagerExecutables {
 	public static final String THUNAR = "thunar";
 	public static final String PCMANFM = "pcmanfm";
 	public static final String ROX = "rox";
+	public static final String NEMO = "nemo";
+	public static final String DDE_FILE_MANAGER = "dde-file-manager";
 	public static final String XDG_OPEN = "xdg-open";
 	public static final String OTHER = "other";
 }

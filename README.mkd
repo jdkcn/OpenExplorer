@@ -19,6 +19,9 @@ To uninstall, just remove the jar.
 
 ## Changelog
 
+### 1.5.1
+* add more linux file manager, dde-file-manager and nemo
+
 ### 1.5.0.v201108051513
 * add linux file manager detect support
 * add preferences page for file manager selection

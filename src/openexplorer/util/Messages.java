@@ -51,6 +51,8 @@ public class Messages extends NLS {
 	public static String PCManFM;
 	public static String ROX;
 	public static String Xdg_open;
+	public static String Nemo;
+	public static String Deepin_File_Manager;
 	public static String Other;
 
 	public static String Full_Path_Label_Text;

@@ -51,10 +51,8 @@ import org.eclipse.ui.PlatformUI;
  * @author <a href="mailto:samson959@gmail.com">Samson Wu</a>
  * @version 1.4.0
  */
-public abstract class AbstractOpenExplorerAction implements IActionDelegate,
-        IPropertyChangeListener {
-	protected IWorkbenchWindow window = PlatformUI.getWorkbench()
-	        .getActiveWorkbenchWindow();
+public abstract class AbstractOpenExplorerAction implements IActionDelegate, IPropertyChangeListener {
+	protected IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	protected Shell shell;
 	protected ISelection currentSelection;
 
@@ -62,16 +60,13 @@ public abstract class AbstractOpenExplorerAction implements IActionDelegate,
 
 	public AbstractOpenExplorerAction() {
 		this.systemBrowser = OperatingSystem.INSTANCE.getSystemBrowser();
-		Activator.getDefault().getPreferenceStore()
-		        .addPropertyChangeListener(this);
+		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(this);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse
-	 * .jface.util.PropertyChangeEvent)
+	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse .jface.util.PropertyChangeEvent)
 	 */
 	public void propertyChange(PropertyChangeEvent event) {
 		if (OperatingSystem.INSTANCE.isLinux()) {
@@ -91,38 +86,44 @@ public abstract class AbstractOpenExplorerAction implements IActionDelegate,
 			for (int i = 0; i < paths.length; i++) {
 				TreePath path = paths[i];
 				IResource resource = null;
+				String location = null;
+				String browser = this.systemBrowser;
 				Object segment = path.getLastSegment();
 				if ((segment instanceof IResource))
 					resource = (IResource) segment;
 				else if ((segment instanceof IJavaElement)) {
 					resource = ((IJavaElement) segment).getResource();
+					if (resource == null) {
+						location = ((IJavaElement) segment).getPath().toOSString();
+						if (location != null) {
+							if (OperatingSystem.INSTANCE.isWindows()) {
+								browser = this.systemBrowser + " /select,";
+							}
+							openInBrowser(browser, location);
+							continue;
+						}
+					}
 				}
 				if (resource == null) {
 					continue;
 				}
-				String browser = this.systemBrowser;
-				String location = resource.getLocation().toOSString();
+				location = resource.getLocation().toOSString();
 				if ((resource instanceof IFile)) {
-					location = ((IFile) resource).getParent().getLocation()
-					        .toOSString();
+					location = ((IFile) resource).getParent().getLocation().toOSString();
 					if (OperatingSystem.INSTANCE.isWindows()) {
 						browser = this.systemBrowser + " /select,";
-						location = ((IFile) resource).getLocation()
-						        .toOSString();
+						location = ((IFile) resource).getLocation().toOSString();
 					}
 				}
 				openInBrowser(browser, location);
 			}
-		} else if (this.currentSelection instanceof ITextSelection
-		        || this.currentSelection instanceof IStructuredSelection) {
+		} else if (this.currentSelection instanceof ITextSelection || this.currentSelection instanceof IStructuredSelection) {
 			// open current editing file
 			IEditorPart editor = window.getActivePage().getActiveEditor();
 			if (editor != null) {
-				IFile current_editing_file = (IFile) editor.getEditorInput()
-				        .getAdapter(IFile.class);
+				IFile current_editing_file = (IFile) editor.getEditorInput().getAdapter(IFile.class);
 				String browser = this.systemBrowser;
-				String location = current_editing_file.getParent()
-				        .getLocation().toOSString();
+				String location = current_editing_file.getParent().getLocation().toOSString();
 				if (OperatingSystem.INSTANCE.isWindows()) {
 					browser = this.systemBrowser + " /select,";
 					location = current_editing_file.getLocation().toOSString();
@@ -140,8 +141,7 @@ public abstract class AbstractOpenExplorerAction implements IActionDelegate,
 				Runtime.getRuntime().exec(new String[] { browser, location });
 			}
 		} catch (IOException e) {
-			MessageDialog.openError(shell, Messages.OpenExploer_Error,
-			        Messages.Cant_Open + " \"" + location + "\"");
+			MessageDialog.openError(shell, Messages.OpenExploer_Error, Messages.Cant_Open + " \"" + location + "\"");
 			e.printStackTrace();
 		}
 	}

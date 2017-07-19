@@ -53,6 +53,12 @@ public class Utils {
 			result = executeCommand("which rox");
 		}
 		if (result == null || result.trim().equals("")) {
+			result = executeCommand("which nemo");
+		}
+		if (result == null || result.trim().equals("")) {
+			result = executeCommand("which dde-file-manager");
+		}
+		if (result == null || result.trim().equals("")) {
 			result = executeCommand("xdg-open");
 		}
 		if (result == null || result.trim().equals("")) {

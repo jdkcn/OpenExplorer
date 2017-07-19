@@ -159,6 +159,16 @@ public class FMPreferencePage extends PreferencePage implements
 		createRadioButtonWithSelectionListener(groupComposite, label, value,
 		        false);
 
+		label = Messages.Deepin_File_Manager;
+		value = IFileManagerExecutables.DDE_FILE_MANAGER;
+		createRadioButtonWithSelectionListener(groupComposite, label, value,
+				false);
+
+		label = Messages.Nemo;
+		value = IFileManagerExecutables.NEMO;
+		createRadioButtonWithSelectionListener(groupComposite, label, value,
+				false);
+
 		label = Messages.Xdg_open;
 		value = IFileManagerExecutables.XDG_OPEN;
 		createRadioButtonWithSelectionListener(groupComposite, label, value,
